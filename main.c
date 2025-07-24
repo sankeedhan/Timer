@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
+#include <string.h>
+
 
 void print_logo();
 void print_result(unsigned long int result);
+
 
 
 void 
@@ -24,6 +28,23 @@ print_result(unsigned long int result)
     unsigned int s = result % 60;
     printf("Total Elapsed: %02u:%02u:%02u\n", h, m, s);
 }
+int
+log_file_write(const char *data)
+{
+    char *copy_data = malloc((strlen(data)+1));
+    strcpy(copy_data,data);
+    FILE *file_name;
+    file_name = fopen("/var/log/timer.log","a+");
+    if (file_name == NULL)
+    {
+        printf("The file is can write.");
+        return 0;
+    }
+    fputs(copy_data,file_name);
+    fclose(file_name);
+    free(copy_data);
+    return 1;
+}
 
 int 
 main(void)
@@ -34,7 +55,9 @@ main(void)
     int not_stop = 0;
     int start = 0;
     int not_repet = 0;
-    printf("%33s", ctime(&start_time));
+    char *log_data=ctime(&start_time);
+    printf("%33s", log_data);
+    log_file_write(log_data);
     while (1)
     {
         int i;
