@@ -1,25 +1,44 @@
 #include <stdio.h>
 #include <time.h>
 
-void print_result(unsigned long int result)
+void print_logo();
+void print_result(unsigned long int result);
+
+
+void 
+print_logo(void)
+{
+    printf("████████╗██╗███╗   ███╗███████╗██████╗\n");
+    printf("╚══██╔══╝██║████╗ ████║██╔════╝██╔══██╗\n");
+    printf("   ██║   ██║██╔████╔██║█████╗  ██████╔╝\n");
+    printf("   ██║   ██║██║╚██╔╝██║██╔══╝  ██╔══██╗\n");
+    printf("   ██║   ██║██║ ╚═╝ ██║███████╗██║  ██║\n");
+    printf("   ╚═╝   ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝\n");
+}
+
+void 
+print_result(unsigned long int result)
 {
     unsigned int h = result / 3600;
     unsigned int m = (result % 3600) / 60;
     unsigned int s = result % 60;
-
     printf("Total Elapsed: %02u:%02u:%02u\n", h, m, s);
 }
 
-int main(void)
+int 
+main(void)
 {
+    print_logo();
     unsigned long int result = 0;
     time_t start_time = time(NULL);
     int not_stop = 0;
+    int start = 0;
     int not_repet = 0;
-    printf("%s", ctime(&start_time));
+    printf("%33s", ctime(&start_time));
     while (1)
     {
         int i;
+        printf(">");
         scanf("%d", &i);
         if (i == not_repet)
         {
@@ -41,23 +60,33 @@ int main(void)
             print_result(result);
             not_stop = 1;
             not_repet = 1;
+            start = 1;
         }
         else if (i == 2)
         {
-            start_time = time(NULL);
-            printf("Starting...\n");
-            not_stop = 0;
-            not_repet = 2;
+            if (start)
+            {
+                start_time = time(NULL);
+                printf("Starting...\n");
+                not_stop = 0;
+                not_repet = 2;
+            } else
+            {
+                printf("Timer already started. No further action allowed.\n");
+                continue;
+            }
+            
+            
+            
             // printf("%s", ctime(&start_time));
         }
         else if (i == 3)
         {
-
+            printf("Stoped.\n");
             time_t reset_time = time(NULL);
             result = (reset_time - start_time) + result;
             // printf("%s", ctime(&reset_time));
             print_result(result);
-            printf("Stoping...\n");
             not_repet = 3;
             break;
         }
